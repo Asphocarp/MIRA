@@ -20,7 +20,6 @@ Tweaks made include:
 
 - Making headings larger
 - Hiding bold, italic, strikethrough and code formatting characters
-- Disabling coloring of bold text and headings
 - List node icon
 - Adding a checkbox icon
 - Collapsing hyperlinks and images
@@ -110,5 +109,5 @@ To release:
 
 ## TODO
 
-- [ ] no more
 - [ ] fix the wrapping bug
+- [ ] more features as in `render-markdown.nvim`

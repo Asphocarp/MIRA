@@ -230,15 +230,15 @@ export class Decorator {
     editor.setDecorations(this.imageIconDecorationType, imageIconRanges); // Apply image icons
 
     // --- Apply Color/Size Decorations (excluding hidden parts) ---
-    const defaultColorRanges = [];
-    defaultColorRanges.push(...this.getRanges(documentText, boldRegex));
-    defaultColorRanges.push(...this.getRanges(documentText, italicRegex));
-    defaultColorRanges.push(...this.getRanges(documentText, hRegex));
+    // const defaultColorRanges = [];
+    // defaultColorRanges.push(...this.getRanges(documentText, boldRegex)); // Removed: Let theme handle bold color
+    // defaultColorRanges.push(...this.getRanges(documentText, italicRegex));
+    // defaultColorRanges.push(...this.getRanges(documentText, hRegex)); // Removed: Let theme handle heading color (size is handled below)
     // console.log('Default Color Ranges:', defaultColorRanges);
-    editor.setDecorations(
-      this.defaultColorDecorationType,
-      Decorator.filterRanges(defaultColorRanges, hiddenRanges),
-    );
+    // editor.setDecorations(
+    //   this.defaultColorDecorationType,
+    //   Decorator.filterRanges(defaultColorRanges, hiddenRanges),
+    // );
 
     editor.setDecorations(
       this.xxlTextDecorationType,
