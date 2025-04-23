@@ -17,7 +17,9 @@ Tweaks made include:
 - Making headings larger
 - Hiding bold, italic, strikethrough and code formatting characters
 - Disabling coloring of bold text and headings
+- List node icon
 - Adding a checkbox icon
+- Collapsing hyperlinks and images
 
 More Keywords (for SEO):
 Markdown, Inline Preview, WYSIWYG
@@ -25,7 +27,7 @@ Markdown, Inline Preview, WYSIWYG
 
 ## Usage
 
-Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=domdomegg.markdown-inline-preview-vscode) or [Open VSX Registry](https://open-vsx.org/extension/domdomegg/markdown-inline-preview-vscode)
+Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=JyuLab.MIRA) or [Open VSX Registry](https://open-vsx.org/extension/JyuLab/MIRA)
 
 <details>
 <summary>Recommended `.vscode/settings.json`</summary>
