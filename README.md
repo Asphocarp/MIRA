@@ -1,5 +1,5 @@
 # MIRA.vsix
-
+![MIRA](branding/icon.png)
 MIRA = Markdown Inline Rendering Assistant.
 
 A VS Code extension for improving the display of markdown directly in the editor. 
