@@ -1,14 +1,24 @@
-# markdown-inline-preview-vscode
+# MIRA.vsix
 
-A VS Code extension for improving the display of markdown directly in the editor. This makes markdown editing more pleasant as you don't need to be switching between the editor and preview as much, and it hides a lot of clutter.
+MIRA = Markdown Inline Rendering Assistant.
+
+A VS Code extension for improving the display of markdown directly in the editor. 
+This makes markdown editing more pleasant as you don't need to be switching between the editor and preview as much, and it hides a lot of clutter.
+Forked from [domdomegg/markdown-inline-preview-vscode](https://github.com/domdomegg/markdown-inline-preview-vscode).
+Inspired largely by [MeanderingProgrammer/render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim).
 
 https://github.com/domdomegg/markdown-inline-preview-vscode/assets/4953590/112da46d-214b-4d2c-8f13-c269c8d040cd
+
+[TODO e.g. text A become text B]
 
 Tweaks made include:
 
 - Making headings larger
 - Hiding bold, italic, strikethrough and code formatting characters
 - Disabling coloring of bold text and headings
+- Adding a checkbox icon
+
+
 
 ## Usage
 
