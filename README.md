@@ -103,3 +103,7 @@ To release:
 1. Use `npm version <major | minor | patch>` to bump the version
 2. Run `git push --follow-tags` to push with tags
 3. Wait for GitHub Actions to publish to the NPM registry.
+
+## Known Issues / Limitations
+
+- **Line Wrapping with Links/Images:** If the original Markdown source for a link or image is long enough to wrap onto a new line, the preview text (e.g., "🔗 Google") may also incorrectly wrap, even if the preview itself is short. This is due to how VS Code handles decorations on wrapped lines.
