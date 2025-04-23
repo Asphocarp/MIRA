@@ -16,12 +16,13 @@ import {
 } from './decorations';
 
 // --- NEW DECORATION TYPES ---
-const hyperlinkIcon = '󰌹';
+const hyperlinkIcon = '󰖟';
 const listItemLevel0Icon = '●';
 const listItemLevel1Icon = '○';
 const listItemLevel2Icon = '◆';
 const listItemLevel3Icon = '◇';
 const imageIcon = '󰥶';
+// later: 󱗖
 
 const commonIconStyles = {
   margin: '0 0.5em 0 0',
