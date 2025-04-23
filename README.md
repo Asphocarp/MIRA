@@ -93,6 +93,8 @@ Pull requests are welcomed on GitHub! To get started:
 
 Run the extension locally with the 'Run and Debug' preset in VS Code.
 
+(me: publish via [drag-n-drop](https://marketplace.visualstudio.com/manage/publishers/jyulab) manually. don't know how to get the azure token)
+
 ## Releases
 
 Versions follow the [semantic versioning spec](https://semver.org/).
@@ -109,5 +111,6 @@ To release:
 
 ## TODO
 
-- [ ] fix the wrapping bug
+- [ ] clickable links
 - [ ] more features as in `render-markdown.nvim`
+- [ ] fix the wrapping bug
