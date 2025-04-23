@@ -1,7 +1,6 @@
-<div style="display: flex; align-items: center;">
-  <img src="branding/icon.png" alt="MIRA" width="64" style="margin-right: 10px;" />
-  <h1>MIRA.vsix</h1>
-</div>
+# MIRA.vsix
+
+<img src="branding/icon.png" alt="MIRA" width="200" style="margin-right: 10px;" />
 
 MIRA = Markdown Inline Rendering Assistant.
 
