@@ -1,5 +1,8 @@
-# MIRA.vsix
-![MIRA](branding/icon.png)
+<div style="display: flex; align-items: center;">
+  <img src="branding/icon.png" alt="MIRA" width="64" style="margin-right: 10px;" />
+  <h1>MIRA.vsix</h1>
+</div>
+
 MIRA = Markdown Inline Rendering Assistant.
 
 A VS Code extension for improving the display of markdown directly in the editor. 
