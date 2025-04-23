@@ -2,10 +2,12 @@
 
 <img src="branding/icon.png" alt="MIRA" width="200" style="margin-right: 10px;" />
 
-MIRA = Markdown Inline Rendering Assistant.
+MIRA = Markdown Inline Rendering Apparatus.
 
 A VS Code extension for improving the display of markdown directly in the editor. 
 This makes markdown editing more pleasant as you don't need to be switching between the editor and preview as much, and it hides a lot of clutter.
+
+> ⚠️ **Note:** Add `Hack Nerd Font` to your VS Code font settings before using this extension.
 
 Forked from [domdomegg/markdown-inline-preview-vscode](https://github.com/domdomegg/markdown-inline-preview-vscode).
 
@@ -28,6 +30,8 @@ Markdown, Inline Preview, WYSIWYG
 
 
 ## Usage
+
+> ⚠️ **Note:** Add `Hack Nerd Font` to your VS Code font settings before using this extension.
 
 Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=JyuLab.MIRA) or [Open VSX Registry](https://open-vsx.org/extension/JyuLab/MIRA)
 

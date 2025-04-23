@@ -13,6 +13,13 @@ Feature-1 List:
 - level-0
     - level-1
         - level-2
+            - level-3
+                - level-4 (cycled)
+
+(no change to numbered list)
+1. asdsa
+2. asdsa
+3. asdsa
 
 Feature-2 Checkbox:
 
@@ -28,12 +35,3 @@ Bugs:
 
 - bug exists, like if the original text changes line, the preview text will also change line, even if hiding the url makes the line shorter.
 
-
-
-
-```
-󰌹 asdasd
-● level-0
-    ○ level-1
-        ◆ level-2
-```

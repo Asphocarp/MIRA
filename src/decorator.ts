@@ -20,6 +20,7 @@ const hyperlinkIcon = '󰌹';
 const listItemLevel0Icon = '●';
 const listItemLevel1Icon = '○';
 const listItemLevel2Icon = '◆';
+const listItemLevel3Icon = '◇';
 const imageIcon = '󰥶';
 
 const commonIconStyles = {
@@ -55,6 +56,14 @@ const ListItemLevel2DecorationType = () => window.createTextEditorDecorationType
   before: {
     color: new ThemeColor('foreground'),
     contentText: listItemLevel2Icon,
+    textDecoration: 'none; display: inline-block; vertical-align: middle;', // Keep necessary alignment
+  },
+});
+
+const ListItemLevel3DecorationType = () => window.createTextEditorDecorationType({
+  before: {
+    color: new ThemeColor('foreground'),
+    contentText: listItemLevel3Icon,
     textDecoration: 'none; display: inline-block; vertical-align: middle;', // Keep necessary alignment
   },
 });
@@ -110,6 +119,8 @@ export class Decorator {
 
   listItemLevel2DecorationType = ListItemLevel2DecorationType();
 
+  listItemLevel3DecorationType = ListItemLevel3DecorationType();
+
   imageIconDecorationType = ImageIconDecorationType();
   // --- End new decoration types ---
 
@@ -139,6 +150,7 @@ export class Decorator {
     const listItemLevel0Ranges: DecorationOptions[] = [];
     const listItemLevel1Ranges: DecorationOptions[] = [];
     const listItemLevel2Ranges: DecorationOptions[] = [];
+    const listItemLevel3Ranges: DecorationOptions[] = []; // NEW: Add level 3
     const imageIconRanges: DecorationOptions[] = []; // For image icons
 
     // --- Handle Symmetric Toggles (Bold, Italic, etc.) ---
@@ -184,12 +196,13 @@ export class Decorator {
 
     // --- Handle List Items ---
     const {
-      itemHideRanges, level0Ranges, level1Ranges, level2Ranges,
+      itemHideRanges, level0Ranges, level1Ranges, level2Ranges, level3Ranges,
     } = this.getListMarkerRanges();
     hiddenRanges.push(...itemHideRanges);
     listItemLevel0Ranges.push(...level0Ranges);
     listItemLevel1Ranges.push(...level1Ranges);
     listItemLevel2Ranges.push(...level2Ranges);
+    listItemLevel3Ranges.push(...level3Ranges); // NEW: Add level 3 ranges
 
     // --- Apply Decorations ---
     editor.setDecorations(this.hideDecorationType, hiddenRanges);
@@ -208,6 +221,10 @@ export class Decorator {
     editor.setDecorations(
       this.listItemLevel2DecorationType,
       listItemLevel2Ranges,
+    );
+    editor.setDecorations(
+      this.listItemLevel3DecorationType, // NEW: Apply level 3 decoration
+      listItemLevel3Ranges,
     );
     editor.setDecorations(this.imageIconDecorationType, imageIconRanges); // Apply image icons
 
@@ -476,6 +493,7 @@ export class Decorator {
     level0Ranges: DecorationOptions[];
     level1Ranges: DecorationOptions[];
     level2Ranges: DecorationOptions[];
+    level3Ranges: DecorationOptions[];
   } {
     if (!this.activeEditor) {
       return {
@@ -483,6 +501,7 @@ export class Decorator {
         level0Ranges: [],
         level1Ranges: [],
         level2Ranges: [],
+        level3Ranges: [],
       };
     }
 
@@ -491,6 +510,7 @@ export class Decorator {
     const level0Ranges: DecorationOptions[] = [];
     const level1Ranges: DecorationOptions[] = [];
     const level2Ranges: DecorationOptions[] = [];
+    const level3Ranges: DecorationOptions[] = [];
     const tabSize = typeof editor.options.tabSize === 'number' ? editor.options.tabSize : 2; // Default to 2 if not number
 
     for (let i = 0; i < editor.document.lineCount; i++) {
@@ -507,13 +527,14 @@ export class Decorator {
 
       // Regex for checkboxes on the same line
       const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x)\])/i;
+      // Regex for unordered list items only
       const listItemMatch = lineText.match(
-        /^([ \t]*)([-*+]|[0-9]+\.)(?=[ \t])/, // Ensure space after marker
+        /^([ \t]*)([-*+])(?=[ \t])/, // Ensure space after marker, only -, *, +
       );
 
       if (listItemMatch) {
         const indentationText = listItemMatch[1]; // All leading whitespace
-        const marker = listItemMatch[2]; // The actual marker like '-', '*', '1.'
+        const marker = listItemMatch[2]; // The actual marker like '-', '*'
 
         // Add check for potentially undefined groups
         if (indentationText === undefined || !marker) continue;
@@ -529,6 +550,7 @@ export class Decorator {
           return level + (char === '\t' ? tabSize : 1);
         }, 0);
         const level = Math.floor(indentationLevel / tabSize); // Simple level calculation
+        const displayLevel = level % 4; // NEW: Cycle through 0, 1, 2, 3
 
         const markerStartIndex = indentationText.length;
         const markerEndIndex = markerStartIndex + marker.length;
@@ -548,21 +570,22 @@ export class Decorator {
         // Hide the original marker
         itemHideRanges.push(markerRange);
 
-        // Add decoration based on level
+        // Add decoration based on level, cycling through 0-3
         const decorationOptions: DecorationOptions = { range: markerRange };
-        if (level === 0) {
+        if (displayLevel === 0) {
           level0Ranges.push(decorationOptions);
-        } else if (level === 1) {
+        } else if (displayLevel === 1) {
           level1Ranges.push(decorationOptions);
-        } else {
-          // Level 2 and above
+        } else if (displayLevel === 2) {
           level2Ranges.push(decorationOptions);
+        } else {
+          level3Ranges.push(decorationOptions);
         }
       }
     }
 
     return {
-      itemHideRanges, level0Ranges, level1Ranges, level2Ranges,
+      itemHideRanges, level0Ranges, level1Ranges, level2Ranges, level3Ranges,
     };
   }
   // --- END NEW: Get List Marker Ranges ---
