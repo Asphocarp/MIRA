@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Markdown Inline Rendering Assistant. A VS Code extension for improving the display of markdown directly in the editor",
   "license": "MIT",
-  "author": "Jun Yu (asphocarp)",
-  "publisher": "asphocarp",
+  "author": "Jun Yu (JyuLab)",
+  "publisher": "JyuLab",
   "private": "true",
   "repository": {
     "type": "git",
