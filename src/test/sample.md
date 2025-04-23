@@ -33,5 +33,5 @@ Feature-3 Hyperlink & Image:
 
 Bugs:
 
-- bug exists, like if the original text changes line, the preview text will also change line, even if hiding the url makes the line shorter.
+- bug exists, like: if the original text changes line, the preview text will also change line, even if hiding the url makes the line shorter.
 
