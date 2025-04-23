@@ -111,6 +111,6 @@ To release:
 
 ## TODO
 
-- [ ] clickable links
+- [ ] clickable links, hover to highlight
 - [ ] more features as in `render-markdown.nvim`
 - [ ] fix the wrapping bug
