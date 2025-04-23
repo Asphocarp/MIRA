@@ -6,4 +6,13 @@ We can use **bold** and *italic* formatting.
 
 ## Subheading
 
-You still get to see the raw markdown formatting when clicking the relevant line, or selecting the text.
+You still get ~~to~~ see the raw markdown formatting when clicking the relevant line, or selecting the text.
+
+- [ ] asdsdasdad
+- [x] asd
+
+- asdas
+    - asdasd
+    - [x] asd
+
+sdasdad

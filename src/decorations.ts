@@ -35,3 +35,27 @@ export function LTextDecorationType() {
     textDecoration: 'none; font-size: 110%;',
   });
 }
+
+export function CheckboxUncheckedDecorationType() {
+  return window.createTextEditorDecorationType({
+    before: {
+      contentText: '󰄱',
+      margin: '0 0.2em 0 0', // Add some spacing
+      color: new ThemeColor('editor.foreground'), // Use default text color
+    },
+    // Hide the original '[ ]' text
+    textDecoration: 'none; display: none;',
+  });
+}
+
+export function CheckboxCheckedDecorationType() {
+  return window.createTextEditorDecorationType({
+    before: {
+      contentText: '󰱒',
+      margin: '0 0.2em 0 0', // Add some spacing
+      color: new ThemeColor('editor.foreground'), // Use default text color
+    },
+    // Hide the original '[x]' text
+    textDecoration: 'none; display: none;',
+  });
+}

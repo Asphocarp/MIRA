@@ -1,6 +1,7 @@
 import { Range, TextEditor } from 'vscode';
 import {
   DefaultColorDecorationType, HideDecorationType, XxlTextDecorationType, XlTextDecorationType, LTextDecorationType,
+  CheckboxCheckedDecorationType, CheckboxUncheckedDecorationType,
 } from './decorations';
 
 const boldRegex = /(\*{2}|_{2})((?=[^\s*_]).*?[^\s*_])(\1)/g;
@@ -19,6 +20,10 @@ export class Decorator {
   hideDecorationType = HideDecorationType();
 
   defaultColorDecorationType = DefaultColorDecorationType();
+
+  checkboxUncheckedDecorationType = CheckboxUncheckedDecorationType();
+
+  checkboxCheckedDecorationType = CheckboxCheckedDecorationType();
 
   xxlTextDecorationType = XxlTextDecorationType();
 
@@ -57,7 +62,14 @@ export class Decorator {
     defaultColorRanges.push(...this.getRanges(documentText, boldRegex));
     defaultColorRanges.push(...this.getRanges(documentText, italicRegex));
     defaultColorRanges.push(...this.getRanges(documentText, hRegex));
+    console.log('Default Color Ranges:', defaultColorRanges);
     this.activeEditor.setDecorations(this.defaultColorDecorationType, defaultColorRanges);
+
+    const { uncheckedRanges, checkedRanges } = this.getCheckboxRanges();
+    console.log('Unchecked Checkbox Ranges:', uncheckedRanges);
+    console.log('Checked Checkbox Ranges:', checkedRanges);
+    this.activeEditor.setDecorations(this.checkboxUncheckedDecorationType, uncheckedRanges);
+    this.activeEditor.setDecorations(this.checkboxCheckedDecorationType, checkedRanges);
 
     this.activeEditor.setDecorations(this.xxlTextDecorationType, this.getRanges(documentText, h1Regex));
     this.activeEditor.setDecorations(this.xlTextDecorationType, this.getRanges(documentText, h2Regex));
@@ -123,6 +135,52 @@ export class Decorator {
       );
     }
     return ranges;
+  }
+
+  getCheckboxRanges(): { uncheckedRanges: Range[]; checkedRanges: Range[] } {
+    if (!this.activeEditor) return { uncheckedRanges: [], checkedRanges: [] };
+
+    const uncheckedRanges: Range[] = [];
+    const checkedRanges: Range[] = [];
+    const { lineCount } = this.activeEditor.document;
+    // Regex to find list markers followed by a checkbox on a single line
+    const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x)\])/i;
+
+    for (let i = 0; i < lineCount; i++) {
+      const line = this.activeEditor.document.lineAt(i);
+      const lineText = line.text;
+      const match = lineText.match(lineCheckboxRegex);
+
+      if (match) {
+        const fullMatchText = match[0]; // e.g., "  - [ ]"
+        const checkboxPart = match[1]; // e.g., "[ ]" or "[x]"
+
+        // Find the start column of the non-whitespace content (e.g., '-')
+        const contentStartCol = fullMatchText.search(/\S/);
+        if (contentStartCol === -1) continue; // Should not happen with this regex
+
+        // The end column is simply the length of the full match
+        const contentEndCol = fullMatchText.length;
+
+        // Create the range for the list marker + checkbox part (e.g., "- [ ]")
+        const range = new Range(i, contentStartCol, i, contentEndCol);
+
+        // Do not decorate if the line is selected
+        if (this.isLineOfRangeSelected(range)) {
+          continue;
+        }
+
+        // Check if it's an unchecked or checked box using the captured checkboxPart
+        if (!checkboxPart) continue; // Should not happen, but satisfies linter
+        if (checkboxPart.toLowerCase() === '[ ]') {
+          uncheckedRanges.push(range);
+        } else { // Matches '[x]' (case-insensitive due to regex flag)
+          checkedRanges.push(range);
+        }
+      }
+    }
+
+    return { uncheckedRanges, checkedRanges };
   }
 
   getRanges(documentText: string, regex: RegExp) {
