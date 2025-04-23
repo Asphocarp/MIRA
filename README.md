@@ -106,4 +106,4 @@ To release:
 
 ## Known Issues / Limitations
 
-- **Line Wrapping with Links/Images:** If the original Markdown source for a link or image is long enough to wrap onto a new line, the preview text (e.g., "🔗 Google") may also incorrectly wrap, even if the preview itself is short. This is due to how VS Code handles decorations on wrapped lines.
+- **Line Wrapping with Links/Images:** If the original Markdown source for a link or image is long enough to wrap onto a new line, the preview text (e.g., "🔗 Google") may also incorrectly wrap, even if the preview itself is short. This is due to how VS Code handles decorations on wrapped lines. As a workaround, you can consider disabling word wrap in your Markdown editor settings (`'editor.wordWrap': 'off'`).
