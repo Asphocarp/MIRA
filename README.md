@@ -19,7 +19,8 @@ Tweaks made include:
 - Disabling coloring of bold text and headings
 - Adding a checkbox icon
 
-
+More Keywords (for SEO):
+Markdown, Inline Preview, WYSIWYG
 
 ## Usage
 
