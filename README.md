@@ -22,6 +22,7 @@ Tweaks made include:
 More Keywords (for SEO):
 Markdown, Inline Preview, WYSIWYG
 
+
 ## Usage
 
 Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=domdomegg.markdown-inline-preview-vscode) or [Open VSX Registry](https://open-vsx.org/extension/domdomegg/markdown-inline-preview-vscode)
