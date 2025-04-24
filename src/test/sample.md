@@ -29,7 +29,8 @@ Feature-2 Checkbox:
 Feature-3 Hyperlink & Image:
 
 [Google](https://www.google.com) is a search engine.
-![Dog](https://dog.com/dog.png) is a dog image.
+![Dog](https://cdn.shopify.com/s/files/1/0086/0795/7054/files/Golden-Retriever.jpg?v=1645179525) is a dog image.
+![MIRA](/Users/asc/repo/Ray/markdown-inline-preview-vscode/branding/icon.png) is our icon.
 
 Bugs:
 
