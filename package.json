@@ -1,6 +1,6 @@
 {
   "name": "MIRA",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Markdown Inline Rendering Apparatus.",
   "license": "MIT",
   "author": "Jun Yu (JyuLab)",
@@ -22,7 +22,63 @@
     "onLanguage:markdown"
   ],
   "main": "./dist/extension.js",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "MIRA",
+      "properties": {
+        "mira.decorateLists": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable list marker decorations."
+        },
+        "mira.decorateCheckboxes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable checkbox decorations."
+        },
+        "mira.decorateHyperlinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable hyperlink decorations (icon and hiding URL)."
+        },
+        "mira.decorateImages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable image decorations (icon and hiding URL)."
+        },
+        "mira.decorateHeadings": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable heading decorations (hiding markdown and resizing text)."
+        },
+        "mira.decorateBold": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable bold text decorations (hiding markdown)."
+        },
+        "mira.decorateItalic": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable italic text decorations (hiding markdown)."
+        },
+        "mira.decorateStrikethrough": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable strikethrough text decorations (hiding markdown)."
+        },
+        "mira.decorateInlineCode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable inline code decorations (hiding markdown)."
+        },
+        "mira.decorateBlockCode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable block code decorations (hiding markdown)."
+        }
+      }
+    }
+  },
   "scripts": {
     "test": "echo 'Run tests using the `Run and Debug` preset in VS Code instead.'",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",

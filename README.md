@@ -79,9 +79,24 @@ Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/item
 
 ## Features
 
-[TODO e.g. text A become text B]
-
 - Support for different checkbox states: `[ ]` (unchecked), `[x]` (checked), `[/]` (in-progress), `[-]` (cancelled)
+
+## Configuration
+
+MIRA is highly customizable. You can enable or disable different decoration features through the VS Code settings:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `mira.decorateLists` | Enable/disable list marker decorations | `true` |
+| `mira.decorateCheckboxes` | Enable/disable checkbox decorations | `true` |
+| `mira.decorateHyperlinks` | Enable/disable hyperlink decorations | `true` |
+| `mira.decorateImages` | Enable/disable image decorations | `true` |
+| `mira.decorateHeadings` | Enable/disable heading decorations | `false` |
+| `mira.decorateBold` | Enable/disable bold text decorations | `false` |
+| `mira.decorateItalic` | Enable/disable italic text decorations | `false` |
+| `mira.decorateStrikethrough` | Enable/disable strikethrough text decorations | `false` |
+| `mira.decorateInlineCode` | Enable/disable inline code decorations | `false` |
+| `mira.decorateBlockCode` | Enable/disable block code decorations | `false` |
 
 ## Contributing
 

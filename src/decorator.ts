@@ -4,6 +4,7 @@ import {
   DecorationOptions,
   ThemeColor,
   window,
+  workspace,
 } from 'vscode';
 import {
   DefaultColorDecorationType,
@@ -131,6 +132,11 @@ export class Decorator {
   imageIconDecorationType = ImageIconDecorationType();
   // --- End new decoration types ---
 
+  // Gets configuration value with specified key
+  getConfig<T>(key: string): T {
+    return workspace.getConfiguration('mira').get<T>(key) as T;
+  }
+
   setActiveEditor(textEditor: TextEditor | undefined) {
     if (!textEditor) {
       return;
@@ -153,107 +159,112 @@ export class Decorator {
     const editor = this.activeEditor; // Alias for easier access
 
     const hiddenRanges: Range[] = [];
-    const hyperlinkIconRanges: DecorationOptions[] = []; // Use DecorationOptions for icons
+    const hyperlinkIconRanges: DecorationOptions[] = []; 
     const listItemLevel0Ranges: DecorationOptions[] = [];
     const listItemLevel1Ranges: DecorationOptions[] = [];
     const listItemLevel2Ranges: DecorationOptions[] = [];
-    const listItemLevel3Ranges: DecorationOptions[] = []; // NEW: Add level 3
-    const imageIconRanges: DecorationOptions[] = []; // For image icons
+    const listItemLevel3Ranges: DecorationOptions[] = []; 
+    const imageIconRanges: DecorationOptions[] = []; 
 
-    // // --- Handle Symmetric Toggles (Bold, Italic, etc.) ---
-    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, boldRegex),);
-    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, italicRegex),);
-    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, strikethroughRegex),);
-    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, inlineCodeRegex),);
-    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, blockCodeRegex),);
+    // --- Handle Symmetric Toggles (Bold, Italic, etc.) ---
+    if (this.getConfig<boolean>('decorateBold')) {
+      hiddenRanges.push(...this.getTogglableSymmetricRanges(documentText, boldRegex));
+    }
+    
+    if (this.getConfig<boolean>('decorateItalic')) {
+      hiddenRanges.push(...this.getTogglableSymmetricRanges(documentText, italicRegex));
+    }
+    
+    if (this.getConfig<boolean>('decorateStrikethrough')) {
+      hiddenRanges.push(...this.getTogglableSymmetricRanges(documentText, strikethroughRegex));
+    }
+    
+    if (this.getConfig<boolean>('decorateInlineCode')) {
+      hiddenRanges.push(...this.getTogglableSymmetricRanges(documentText, inlineCodeRegex));
+    }
+    
+    if (this.getConfig<boolean>('decorateBlockCode')) {
+      hiddenRanges.push(...this.getTogglableSymmetricRanges(documentText, blockCodeRegex));
+    }
 
-    // // --- Handle Headings ---
-    // hiddenRanges.push(...this.getHeadingHidingRanges(documentText));
+    // --- Handle Headings ---
+    if (this.getConfig<boolean>('decorateHeadings')) {
+      hiddenRanges.push(...this.getHeadingHidingRanges(documentText));
+    }
 
     // --- Handle Hyperlinks ---
-    const { linkHideRanges, linkIconRanges } = this.getHyperlinkRanges(documentText);
-    hiddenRanges.push(...linkHideRanges);
-    hyperlinkIconRanges.push(...linkIconRanges);
+    if (this.getConfig<boolean>('decorateHyperlinks')) {
+      const { linkHideRanges, linkIconRanges } = this.getHyperlinkRanges(documentText);
+      hiddenRanges.push(...linkHideRanges);
+      hyperlinkIconRanges.push(...linkIconRanges);
+    }
 
     // --- Handle Images ---
-    const { imageHideRanges, imgIconRanges } = this.getImageRanges(documentText);
-    hiddenRanges.push(...imageHideRanges);
-    imageIconRanges.push(...imgIconRanges);
+    if (this.getConfig<boolean>('decorateImages')) {
+      const { imageHideRanges, imgIconRanges } = this.getImageRanges(documentText);
+      hiddenRanges.push(...imageHideRanges);
+      imageIconRanges.push(...imgIconRanges);
+    }
 
     // --- Handle Checkboxes ---
-    const { uncheckedRanges, checkedRanges, inProcessRanges, cancelledRanges } = this.getCheckboxRanges();
-    editor.setDecorations(
-      this.checkboxUncheckedDecorationType,
-      uncheckedRanges,
-    );
-    editor.setDecorations(this.checkboxCheckedDecorationType, checkedRanges);
-    editor.setDecorations(this.checkboxInProcessDecorationType, inProcessRanges);
-    editor.setDecorations(this.checkboxCancelledDecorationType, cancelledRanges);
-    // Hide the original checkbox text like "- [ ] "
-    hiddenRanges.push(...uncheckedRanges);
-    hiddenRanges.push(...checkedRanges);
-    hiddenRanges.push(...inProcessRanges);
-    hiddenRanges.push(...cancelledRanges);
+    if (this.getConfig<boolean>('decorateCheckboxes')) {
+      const { uncheckedRanges, checkedRanges, inProcessRanges, cancelledRanges } = this.getCheckboxRanges();
+      editor.setDecorations(this.checkboxUncheckedDecorationType, uncheckedRanges);
+      editor.setDecorations(this.checkboxCheckedDecorationType, checkedRanges);
+      editor.setDecorations(this.checkboxInProcessDecorationType, inProcessRanges);
+      editor.setDecorations(this.checkboxCancelledDecorationType, cancelledRanges);
+      // Hide the original checkbox text like "- [ ] "
+      hiddenRanges.push(...uncheckedRanges);
+      hiddenRanges.push(...checkedRanges);
+      hiddenRanges.push(...inProcessRanges);
+      hiddenRanges.push(...cancelledRanges);
+    }
 
     // --- Handle List Items ---
-    const {
-      itemHideRanges, level0Ranges, level1Ranges, level2Ranges, level3Ranges,
-    } = this.getListMarkerRanges();
-    hiddenRanges.push(...itemHideRanges);
-    listItemLevel0Ranges.push(...level0Ranges);
-    listItemLevel1Ranges.push(...level1Ranges);
-    listItemLevel2Ranges.push(...level2Ranges);
-    listItemLevel3Ranges.push(...level3Ranges); // NEW: Add level 3 ranges
+    if (this.getConfig<boolean>('decorateLists')) {
+      const {
+        itemHideRanges, level0Ranges, level1Ranges, level2Ranges, level3Ranges,
+      } = this.getListMarkerRanges();
+      hiddenRanges.push(...itemHideRanges);
+      listItemLevel0Ranges.push(...level0Ranges);
+      listItemLevel1Ranges.push(...level1Ranges);
+      listItemLevel2Ranges.push(...level2Ranges);
+      listItemLevel3Ranges.push(...level3Ranges);
+    }
 
     // --- Apply Decorations ---
     editor.setDecorations(this.hideDecorationType, hiddenRanges);
-    editor.setDecorations(
-      this.hyperlinkIconDecorationType,
-      hyperlinkIconRanges,
-    );
-    editor.setDecorations(
-      this.listItemLevel0DecorationType,
-      listItemLevel0Ranges,
-    );
-    editor.setDecorations(
-      this.listItemLevel1DecorationType,
-      listItemLevel1Ranges,
-    );
-    editor.setDecorations(
-      this.listItemLevel2DecorationType,
-      listItemLevel2Ranges,
-    );
-    editor.setDecorations(
-      this.listItemLevel3DecorationType, // NEW: Apply level 3 decoration
-      listItemLevel3Ranges,
-    );
-    editor.setDecorations(this.imageIconDecorationType, imageIconRanges); // Apply image icons
+    
+    if (this.getConfig<boolean>('decorateHyperlinks')) {
+      editor.setDecorations(this.hyperlinkIconDecorationType, hyperlinkIconRanges);
+    }
+    
+    if (this.getConfig<boolean>('decorateLists')) {
+      editor.setDecorations(this.listItemLevel0DecorationType, listItemLevel0Ranges);
+      editor.setDecorations(this.listItemLevel1DecorationType, listItemLevel1Ranges);
+      editor.setDecorations(this.listItemLevel2DecorationType, listItemLevel2Ranges);
+      editor.setDecorations(this.listItemLevel3DecorationType, listItemLevel3Ranges);
+    }
+    
+    if (this.getConfig<boolean>('decorateImages')) {
+      editor.setDecorations(this.imageIconDecorationType, imageIconRanges);
+    }
 
-    // --- Apply Color/Size Decorations (excluding hidden parts) ---
-    // const defaultColorRanges = [];
-    // defaultColorRanges.push(...this.getRanges(documentText, boldRegex)); // Removed: Let theme handle bold color
-    // defaultColorRanges.push(...this.getRanges(documentText, italicRegex));
-    // defaultColorRanges.push(...this.getRanges(documentText, hRegex)); // Removed: Let theme handle heading color (size is handled below)
-    // console.log('Default Color Ranges:', defaultColorRanges);
-    // editor.setDecorations(
-    //   this.defaultColorDecorationType,
-    //   Decorator.filterRanges(defaultColorRanges, hiddenRanges),
-    // );
-
-    /* // Commented out heading styling
-    editor.setDecorations(
-      this.xxlTextDecorationType,
-      Decorator.filterRanges(this.getRanges(documentText, h1Regex), hiddenRanges),
-    );
-    editor.setDecorations(
-      this.xlTextDecorationType,
-      Decorator.filterRanges(this.getRanges(documentText, h2Regex), hiddenRanges),
-    );
-    editor.setDecorations(
-      this.lTextDecorationType,
-      Decorator.filterRanges(this.getRanges(documentText, h3Regex), hiddenRanges),
-    );
-    */
+    // --- Apply Heading Size Decorations (if enabled) ---
+    if (this.getConfig<boolean>('decorateHeadings')) {
+      editor.setDecorations(
+        this.xxlTextDecorationType,
+        Decorator.filterRanges(this.getRanges(documentText, h1Regex), hiddenRanges),
+      );
+      editor.setDecorations(
+        this.xlTextDecorationType,
+        Decorator.filterRanges(this.getRanges(documentText, h2Regex), hiddenRanges),
+      );
+      editor.setDecorations(
+        this.lTextDecorationType,
+        Decorator.filterRanges(this.getRanges(documentText, h3Regex), hiddenRanges),
+      );
+    }
   }
 
   // Helper to filter out ranges that are completely hidden

@@ -12,9 +12,15 @@ export function activate(context: vscode.ExtensionContext) {
   const changeTextEditorSelection = vscode.window.onDidChangeTextEditorSelection(() => {
     decorator.updateDecorations();
   });
+  const changeConfiguration = vscode.workspace.onDidChangeConfiguration((e) => {
+    if (e.affectsConfiguration('mira')) {
+      decorator.updateDecorations();
+    }
+  });
 
   context.subscriptions.push(changeActiveTextEditor);
   context.subscriptions.push(changeTextEditorSelection);
+  context.subscriptions.push(changeConfiguration);
 
   // Register a document link provider so markdown links become clickable and show hover highlights
   const linkProvider = vscode.languages.registerDocumentLinkProvider(
