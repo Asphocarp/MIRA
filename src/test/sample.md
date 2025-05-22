@@ -23,8 +23,8 @@ Feature-1 List:
 
 Feature-2 Checkbox:
 
-- [ ] asdsd
-- [x] asd
+- [ ] example
+- [x] example 2
 
 Feature-3 Hyperlink & Image:
 

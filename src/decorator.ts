@@ -191,7 +191,7 @@ export class Decorator {
       uncheckedRanges,
     );
     editor.setDecorations(this.checkboxCheckedDecorationType, checkedRanges);
-    // Hide the original checkbox text like "- [ ] "
+    // Hide the original checkbox text like "- \[ \] "
     hiddenRanges.push(...uncheckedRanges);
     hiddenRanges.push(...checkedRanges);
 
