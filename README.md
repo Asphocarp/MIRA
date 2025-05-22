@@ -131,3 +131,4 @@ To release:
 - [ ] clickable links, hover to highlight
 - [ ] more features as in `render-markdown.nvim`
 - [ ] 1 (Hard) fix the word wrapping bug
+- [ ] need to claim a namespace to publish on open-vsx.org (what a shit website)
