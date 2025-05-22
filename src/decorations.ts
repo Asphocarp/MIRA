@@ -59,3 +59,28 @@ export function CheckboxCheckedDecorationType() {
     textDecoration: 'none; display: none;',
   });
 }
+
+export function CheckboxInProcessDecorationType() {
+  return window.createTextEditorDecorationType({
+    before: {
+    //   contentText: '󰪥',
+      contentText: '\uEABD',
+      margin: '0 0.2em 0 0', // Add some spacing
+      color: new ThemeColor('editor.foreground'), // Use default text color
+    },
+    // Hide the original '[/]' text
+    textDecoration: 'none; display: none;',
+  });
+}
+
+export function CheckboxCancelledDecorationType() {
+  return window.createTextEditorDecorationType({
+    before: {
+      contentText: '☒',
+      margin: '0 0.2em 0 0', // Add some spacing
+      color: new ThemeColor('editor.foreground'), // Use default text color
+    },
+    // Hide the original '[-]' text
+    textDecoration: 'none; display: none;',
+  });
+}

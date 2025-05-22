@@ -13,6 +13,8 @@ import {
   LTextDecorationType,
   CheckboxCheckedDecorationType,
   CheckboxUncheckedDecorationType,
+  CheckboxInProcessDecorationType,
+  CheckboxCancelledDecorationType,
 } from './decorations';
 
 // --- NEW DECORATION TYPES ---
@@ -105,6 +107,10 @@ export class Decorator {
 
   checkboxCheckedDecorationType = CheckboxCheckedDecorationType();
 
+  checkboxInProcessDecorationType = CheckboxInProcessDecorationType();
+
+  checkboxCancelledDecorationType = CheckboxCancelledDecorationType();
+
   xxlTextDecorationType = XxlTextDecorationType();
 
   xlTextDecorationType = XlTextDecorationType();
@@ -154,25 +160,15 @@ export class Decorator {
     const listItemLevel3Ranges: DecorationOptions[] = []; // NEW: Add level 3
     const imageIconRanges: DecorationOptions[] = []; // For image icons
 
-    // --- Handle Symmetric Toggles (Bold, Italic, etc.) ---
-    hiddenRanges.push(
-      ...this.getTogglableSymmetricRanges(documentText, boldRegex),
-    );
-    hiddenRanges.push(
-      ...this.getTogglableSymmetricRanges(documentText, italicRegex),
-    );
-    hiddenRanges.push(
-      ...this.getTogglableSymmetricRanges(documentText, strikethroughRegex),
-    );
-    hiddenRanges.push(
-      ...this.getTogglableSymmetricRanges(documentText, inlineCodeRegex),
-    );
-    hiddenRanges.push(
-      ...this.getTogglableSymmetricRanges(documentText, blockCodeRegex),
-    );
+    // // --- Handle Symmetric Toggles (Bold, Italic, etc.) ---
+    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, boldRegex),);
+    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, italicRegex),);
+    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, strikethroughRegex),);
+    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, inlineCodeRegex),);
+    // hiddenRanges.push( ...this.getTogglableSymmetricRanges(documentText, blockCodeRegex),);
 
-    // --- Handle Headings ---
-    hiddenRanges.push(...this.getHeadingHidingRanges(documentText));
+    // // --- Handle Headings ---
+    // hiddenRanges.push(...this.getHeadingHidingRanges(documentText));
 
     // --- Handle Hyperlinks ---
     const { linkHideRanges, linkIconRanges } = this.getHyperlinkRanges(documentText);
@@ -185,15 +181,19 @@ export class Decorator {
     imageIconRanges.push(...imgIconRanges);
 
     // --- Handle Checkboxes ---
-    const { uncheckedRanges, checkedRanges } = this.getCheckboxRanges();
+    const { uncheckedRanges, checkedRanges, inProcessRanges, cancelledRanges } = this.getCheckboxRanges();
     editor.setDecorations(
       this.checkboxUncheckedDecorationType,
       uncheckedRanges,
     );
     editor.setDecorations(this.checkboxCheckedDecorationType, checkedRanges);
-    // Hide the original checkbox text like "- \[ \] "
+    editor.setDecorations(this.checkboxInProcessDecorationType, inProcessRanges);
+    editor.setDecorations(this.checkboxCancelledDecorationType, cancelledRanges);
+    // Hide the original checkbox text like "- [ ] "
     hiddenRanges.push(...uncheckedRanges);
     hiddenRanges.push(...checkedRanges);
+    hiddenRanges.push(...inProcessRanges);
+    hiddenRanges.push(...cancelledRanges);
 
     // --- Handle List Items ---
     const {
@@ -240,6 +240,7 @@ export class Decorator {
     //   Decorator.filterRanges(defaultColorRanges, hiddenRanges),
     // );
 
+    /* // Commented out heading styling
     editor.setDecorations(
       this.xxlTextDecorationType,
       Decorator.filterRanges(this.getRanges(documentText, h1Regex), hiddenRanges),
@@ -252,6 +253,7 @@ export class Decorator {
       this.lTextDecorationType,
       Decorator.filterRanges(this.getRanges(documentText, h3Regex), hiddenRanges),
     );
+    */
   }
 
   // Helper to filter out ranges that are completely hidden
@@ -333,14 +335,16 @@ export class Decorator {
     return ranges;
   }
 
-  getCheckboxRanges(): { uncheckedRanges: Range[]; checkedRanges: Range[] } {
-    if (!this.activeEditor) return { uncheckedRanges: [], checkedRanges: [] };
+  getCheckboxRanges(): { uncheckedRanges: Range[]; checkedRanges: Range[]; inProcessRanges: Range[]; cancelledRanges: Range[] } {
+    if (!this.activeEditor) return { uncheckedRanges: [], checkedRanges: [], inProcessRanges: [], cancelledRanges: [] };
 
     const uncheckedRanges: Range[] = [];
     const checkedRanges: Range[] = [];
+    const inProcessRanges: Range[] = [];
+    const cancelledRanges: Range[] = [];
     const { lineCount } = this.activeEditor.document;
     // Regex to find list markers followed by a checkbox on a single line
-    const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x)\])/i;
+    const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x|\/|-)\])/i;
 
     for (let i = 0; i < lineCount; i++) {
       const line = this.activeEditor.document.lineAt(i);
@@ -370,14 +374,17 @@ export class Decorator {
         if (!checkboxPart) continue; // Should not happen, but satisfies linter
         if (checkboxPart.toLowerCase() === '[ ]') {
           uncheckedRanges.push(range);
-        } else {
-          // Matches '[x]' (case-insensitive due to regex flag)
+        } else if (checkboxPart.toLowerCase() === '[x]') {
           checkedRanges.push(range);
+        } else if (checkboxPart.toLowerCase() === '[/]') {
+          inProcessRanges.push(range);
+        } else if (checkboxPart.toLowerCase() === '[-]') {
+          cancelledRanges.push(range);
         }
       }
     }
 
-    return { uncheckedRanges, checkedRanges };
+    return { uncheckedRanges, checkedRanges, inProcessRanges, cancelledRanges };
   }
 
   // --- NEW: Get Hyperlink Ranges ---
@@ -527,7 +534,7 @@ export class Decorator {
       ) continue;
 
       // Regex for checkboxes on the same line
-      const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x)\])/i;
+      const lineCheckboxRegex = /^[ \t]*(?:[-*+]|[0-9]+\.)[ \t]+(\[( |x|\/|-)\])/i;
       // Regex for unordered list items only
       const listItemMatch = lineText.match(
         /^([ \t]*)([-*+])(?=[ \t])/, // Ensure space after marker, only -, *, +

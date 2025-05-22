@@ -81,6 +81,7 @@ Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/item
 
 [TODO e.g. text A become text B]
 
+- Support for different checkbox states: `[ ]` (unchecked), `[x]` (checked), `[/]` (in-progress), `[-]` (cancelled)
 
 ## Contributing
 
