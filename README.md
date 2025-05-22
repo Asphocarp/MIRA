@@ -109,7 +109,8 @@ Pull requests are welcomed on GitHub! To get started:
 
 Run the extension locally with the 'Run and Debug' preset in VS Code.
 
-(me: publish via [drag-n-drop](https://marketplace.visualstudio.com/manage/publishers/jyulab) manually. don't know how to get the azure token)
+(azure token in https://dev.azure.com/JyuLab/)
+(me: publish via [drag-n-drop](https://marketplace.visualstudio.com/manage/publishers/jyulab) manually.)
 
 ## Releases
 
